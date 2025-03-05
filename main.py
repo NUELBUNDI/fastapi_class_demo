@@ -14,6 +14,7 @@ def model_load():
         # If the loaded object is a tuple, unpack it
         if isinstance(loaded_object, tuple) and len(loaded_object) == 2:
             loaded_model, loaded_metadata = loaded_object
+            
         else:
             raise ValueError("Unexpected format in the loaded model file")
 
@@ -24,17 +25,17 @@ def model_load():
 # Predict using the loaded model
 def predict_model(model, data):
     try:
-        y_predict = model.predict(data)
+        y_predict       = model.predict(data)
         y_predict_proba = model.predict_proba(data)[:, 1]  # For binary classification
+        
         return y_predict, y_predict_proba
+    
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error during prediction: {str(e)}")
 
 # Load the model and metadata
 loaded_model, loaded_metadata = model_load()
 
-# Debugging print to check if the model is loaded correctly
-print(f"Loaded model type: {type(loaded_model)}")
 
 # Create a FastAPI app
 app = FastAPI()
@@ -52,9 +53,11 @@ class InputData(BaseModel):
 
 @app.post("/predict")
 def predict(data: InputData):
+    
+    loaded_model, _ = model_load()
     # Encoding the salary feature
     salary_mapping = {'low': 0, 'medium': 1, 'high': 2}
-    salary = salary_mapping.get(data.salary, -1)
+    salary        = salary_mapping.get(data.salary, -1)
 
     if salary == -1:
         raise HTTPException(status_code=400, detail="Invalid salary value")
