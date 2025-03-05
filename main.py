@@ -9,7 +9,7 @@ import joblib
 def model_load():
     try:
         # Ensure proper loading of the tuple (model, metadata)
-        loaded_object = joblib.load('gb_model_metadata.pkl')
+        loaded_object = joblib.load('gb_model_metadata .pkl')
         
         # If the loaded object is a tuple, unpack it
         if isinstance(loaded_object, tuple) and len(loaded_object) == 2:
